@@ -53,7 +53,7 @@ def makeClusterMatrix(fibers):
     
 def agglomCluster(fibers, numClus=2, threshold=null):
     '''
-    returns cluster assignments for input fibers
+    returns cluster assignments (in binary) for input fibers
     and maybe cluster centroids
     '''
     assert(fibers!=null)
@@ -64,13 +64,12 @@ def agglomCluster(fibers, numClus=2, threshold=null):
         while (stoppingCondition>=0) :
             #find min value in ClusterMatrix
             currentMin, xCord, yCord = float("inf"), float("inf"), float("inf")
-                for (y in len(clusterMatrix)):
-                    for (x in len(clusterMatrix)):
+                for (x in len(clusterMatrix)):
+                    for (y in len(clusterMatrix)):
                         if (currentMin>clusterMatrix[x][y] and clusterMatrix[x][y]!=0):
                             currentMin=clusterMatrix[x][y]
                             xCord, yCord = x, y
             #reduce ClusterMatrix   --    uses/involves calculation of mean matrix entries
-            #update clusterAssignments
             newClusterMatrix = [[0 for i in range(len(clusterMatrix)-1)] for j in range(len(clusterMatrix)-1)]
             newRowColumn = [0 for i in range(len(clusterMatrix)-1)]
             
@@ -78,6 +77,14 @@ def agglomCluster(fibers, numClus=2, threshold=null):
                 z=xCord
                 xCord=yCord
                 yCord=z     #now we know that x is less than y
+            
+            #update clusterAssignments
+            valueToChange = clusterAssignments[yCord]
+            valueToChangeTo = clusterAssignments[xCord]
+            for (i in range(len(clusterAssignments))):
+                if (clusterAssignments[i] == valueToChange):
+                    clusterAssignments[i] = valueToChangeTo)
+            
             decrementor=0
             
             for (i in range(len(newRowColumn))):
@@ -108,6 +115,12 @@ def agglomCluster(fibers, numClus=2, threshold=null):
             clusterMatrix=newClusterMatrix
             stopingCondition--
     
+    first = clusterAssignments[0]
+    
+    for i in range(len(clusterAssignments)):
+        if clusterAssignments[i] = first:
+            clusterAssignments[i] = 0
+            
     return clusterAssignments
     
 
